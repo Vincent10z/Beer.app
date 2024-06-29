@@ -1,9 +1,9 @@
-// users/product_handler/breweries_handler.go
+// users/beer_handler/breweries_handler.go
 package brewery_handler
 
 import (
-	"Beer.app/brewery/repository"
-	"Beer.app/brewery/service"
+	"Beer.app/breweries/repository"
+	"Beer.app/breweries/service"
 	"Beer.app/models"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -23,14 +23,14 @@ func BreweryRouter(e *echo.Echo) {
 	breweryService := service.NewBreweryService(breweryRepo)
 	breweryHandler := NewBreweryHandler(breweryService)
 
-	e.GET("/brewery/:id", breweryHandler.GetBreweryByID)
-	e.POST("/brewery", breweryHandler.CreateBrewery)
+	e.GET("/breweries/:id", breweryHandler.GetBreweryByID)
+	e.POST("/breweries", breweryHandler.CreateBrewery)
 }
 
 func (h *BreweryHandler) GetBreweryByID(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid brewery ID"})
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid breweries ID"})
 	}
 
 	brewery, err := h.service.GetBrewery(id)
@@ -48,7 +48,7 @@ func (h *BreweryHandler) CreateBrewery(c echo.Context) error {
 	}
 
 	if err := h.service.CreateBrewery(brewery); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create brewery"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create breweries"})
 	}
 
 	return c.JSON(http.StatusCreated, brewery)

@@ -1,4 +1,4 @@
-// users/product_handler/reviews_handler.go
+// users/beer_handler/breweryReviews_handler.go
 package users_handler
 
 import (
@@ -18,6 +18,7 @@ func NewUserHandler(service service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
+// UserRouter to register user routes
 func UserRouter(e *echo.Echo) {
 	userRepo := repository.NewUserRepository()
 	userService := service.NewUserService(userRepo)
@@ -27,6 +28,7 @@ func UserRouter(e *echo.Echo) {
 	e.POST("/users", userHandler.CreateUser)
 }
 
+// GetUser handles `GET /users/:id`
 func (h *UserHandler) GetUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -40,6 +42,7 @@ func (h *UserHandler) GetUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+// CreateUser handles `POST /users`
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	user := new(models.User)
 	if err := c.Bind(user); err != nil {

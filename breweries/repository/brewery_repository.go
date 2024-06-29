@@ -1,4 +1,4 @@
-// users/repository/reviews_repository.go
+// users/repository/breweryReviews_repository.go
 package repository
 
 import (
@@ -22,7 +22,7 @@ func NewBreweryRepository() BreweryRepository {
 func (r *breweryRepository) GetBreweryByID(id int) (*models.Brewery, error) {
 	brewery, exists := r.breweries[id]
 	if !exists {
-		return nil, errors.New("brewery not found")
+		return nil, errors.New("breweries not found")
 	}
 	return brewery, nil
 }

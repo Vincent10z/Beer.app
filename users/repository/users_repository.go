@@ -1,4 +1,4 @@
-// users/repository/reviews_repository.go
+// users/repository/breweryReviews_repository.go
 package repository
 
 import (
@@ -20,6 +20,7 @@ func NewUserRepository() UserRepository {
 }
 
 func (r *userRepository) GetUserByID(id int) (*models.User, error) {
+	
 	user, exists := r.users[id]
 	if !exists {
 		return nil, errors.New("user not found")

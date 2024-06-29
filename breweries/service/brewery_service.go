@@ -1,9 +1,9 @@
-// users/service/reviews_service.go
+// users/service/breweryReviews_service.go
 package service
 
 import (
+	"Beer.app/breweries/repository"
 	"Beer.app/models"
-	"Beer.app/users/repository"
 )
 
 type BreweryService interface {

@@ -1,10 +1,10 @@
-// reviews/product_handler/reviews_handler.go
+// breweryReviews/beer_handler/breweryReviews_handler.go
 package reviews_handler
 
 import (
+	"Beer.app/breweryReviews/repository"
+	"Beer.app/breweryReviews/service"
 	"Beer.app/models"
-	"Beer.app/reviews/repository"
-	"Beer.app/reviews/service"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
@@ -23,8 +23,8 @@ func ReviewRouter(e *echo.Echo) {
 	reviewService := service.NewReviewService(reviewRepo)
 	reviewHandler := NewReviewHandler(reviewService)
 
-	e.GET("/reviews/:id", reviewHandler.GetReview)
-	e.POST("/reviews", reviewHandler.CreateReview)
+	e.GET("/breweryReviews/:id", reviewHandler.GetReview)
+	e.POST("/breweryReviews", reviewHandler.CreateReview)
 }
 
 func (h *ReviewHandler) GetReview(c echo.Context) error {
