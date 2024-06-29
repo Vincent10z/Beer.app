@@ -1,4 +1,4 @@
-// users/service/users_service.go
+// users/service/brewery_service.go
 package service
 
 import (
