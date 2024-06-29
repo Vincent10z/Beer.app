@@ -6,11 +6,15 @@ import (
 	"Beer.app/beers/beer_handler"
 	"Beer.app/breweries/brewery_handler"
 	"Beer.app/breweryReviews/breweryReviews_handler"
+	"Beer.app/database"
 	"Beer.app/users/users_handler"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+	db := database.ConnectDB()
+	defer db.Close()
+
 	e := echo.New()
 
 	// Register user routes

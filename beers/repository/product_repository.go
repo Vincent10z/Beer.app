@@ -3,7 +3,8 @@ package repository
 
 import (
 	"Beer.app/models"
-	"errors"
+	"github.com/rotisserie/eris"
+	"gorm.io/gorm"
 )
 
 type BeerRepository interface {
@@ -12,22 +13,27 @@ type BeerRepository interface {
 }
 
 type beerRepository struct {
-	beers map[int]*models.Beer
+	db *gorm.DB
 }
 
-func NewBeerRepository() BeerRepository {
-	return &beerRepository{beers: make(map[int]*models.Beer)}
+func NewBeerRepository(db *gorm.DB) BeerRepository {
+	return &beerRepository{db: db}
 }
 
 func (r *beerRepository) GetBeerByID(id int) (*models.Beer, error) {
-	beer, exists := r.beers[id]
-	if !exists {
-		return nil, errors.New("beer not found")
+	beer := &models.Beer{}
+
+	if err := r.db.Where("id = ?", id).First(beer).Error; err != nil {
+		return nil, eris.Wrapf(err, "failed to get beer with id %d", id)
 	}
+
 	return beer, nil
 }
 
 func (r *beerRepository) CreateBeer(beer *models.Beer) error {
-	r.beers[beer.Id] = beer
+
+	if err := r.db.Create(beer).Error; err != nil {
+		return eris.Wrapf(err, "failed to create beer")
+	}
 	return nil
 }

@@ -1,19 +1,20 @@
 package database
 
 import (
+	"github.com/labstack/gommon/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func InitDatabase() (*gorm.DB, error) {
-	dsn := "user:password@tcp(localhost:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+func ConnectDB() *gorm.DB {
+	dsn := "host=localhost user=postgres password=Gerrard10z!!@ dbname=Beer.app port=5432 sslmode=disable TimeZone=Asia/Kolkata"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		log.Fatalf("Error connecting to database: %v", err)
 	}
 
 	DB = db
-	return DB, nil
+	return DB
 }
