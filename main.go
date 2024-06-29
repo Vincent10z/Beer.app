@@ -13,16 +13,15 @@ import (
 
 func main() {
 	db := database.ConnectDB()
-	defer db.Close()
 
 	e := echo.New()
 
 	// Register user routes
-	users_handler.UserRouter(e)
-	beer_handler.BeerRouter(e)
-	beerReviews_handler.BeerReviewRouter(e)
-	breweryReviews_handler.BreweryReviewsRouter(e)
-	brewery_handler.BreweryRouter(e)
+	users_handler.UserRouter(e, db)
+	beer_handler.BeerRouter(e, db)
+	beerReviews_handler.BeerReviewRouter(e, db)
+	breweryReviews_handler.BreweryReviewsRouter(e, db)
+	brewery_handler.BreweryRouter(e, db)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

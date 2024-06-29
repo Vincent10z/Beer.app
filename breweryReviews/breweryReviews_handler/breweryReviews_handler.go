@@ -6,6 +6,7 @@ import (
 	"Beer.app/breweryReviews/service"
 	"Beer.app/models"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
@@ -18,8 +19,8 @@ func NewReviewHandler(service service.BreweryReviewService) *BreweryReviewHandle
 	return &BreweryReviewHandler{service: service}
 }
 
-func BreweryReviewsRouter(e *echo.Echo) {
-	reviewRepo := repository.NewBreweryReviewRepository()
+func BreweryReviewsRouter(e *echo.Echo, db *gorm.DB) {
+	reviewRepo := repository.NewBreweryReviewRepository(db)
 	reviewService := service.NewReviewService(reviewRepo)
 	reviewHandler := NewReviewHandler(reviewService)
 

@@ -6,6 +6,7 @@ import (
 	"Beer.app/users/repository"
 	"Beer.app/users/service"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
@@ -19,8 +20,8 @@ func NewUserHandler(service service.UserService) *UserHandler {
 }
 
 // UserRouter to register user routes
-func UserRouter(e *echo.Echo) {
-	userRepo := repository.NewUserRepository()
+func UserRouter(e *echo.Echo, db *gorm.DB) {
+	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := NewUserHandler(userService)
 

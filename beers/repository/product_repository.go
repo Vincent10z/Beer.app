@@ -7,13 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
+type beerRepository struct {
+	db *gorm.DB
+}
+
 type BeerRepository interface {
 	GetBeerByID(id int) (*models.Beer, error)
 	CreateBeer(beer *models.Beer) error
-}
-
-type beerRepository struct {
-	db *gorm.DB
 }
 
 func NewBeerRepository(db *gorm.DB) BeerRepository {

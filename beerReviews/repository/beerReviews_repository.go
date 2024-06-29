@@ -3,7 +3,8 @@ package repository
 
 import (
 	"Beer.app/models"
-	"errors"
+	"github.com/rotisserie/eris"
+	"gorm.io/gorm"
 )
 
 type BeerReviewRepository interface {
@@ -12,22 +13,27 @@ type BeerReviewRepository interface {
 }
 
 type beerReviewRepository struct {
-	reviews map[int]*models.Review
+	db *gorm.DB
 }
 
-func NewBeerReviewRepository() BeerReviewRepository {
-	return &beerReviewRepository{reviews: make(map[int]*models.Review)}
+func NewBeerReviewRepository(db *gorm.DB) BeerReviewRepository {
+	return &beerReviewRepository{db: db}
 }
 
 func (r *beerReviewRepository) GetBeerReviewByID(id int) (*models.Review, error) {
-	review, exists := r.reviews[id]
-	if !exists {
-		return nil, errors.New("review not found")
+	beerReview := &models.Review{}
+
+	if err := r.db.Where("id = ?", id).First(beerReview).Error; err != nil {
+		return nil, eris.Wrapf(err, "failed to get beer review with id %d", id)
 	}
-	return review, nil
+
+	return beerReview, nil
 }
 
 func (r *beerReviewRepository) CreateBeerReview(review *models.Review) error {
-	r.reviews[review.ID] = review
+	if err := r.db.Create(review).Error; err != nil {
+		return eris.Wrap(err, "failed to create beer review")
+	}
+
 	return nil
 }
