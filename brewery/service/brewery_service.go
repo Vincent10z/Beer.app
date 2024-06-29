@@ -1,4 +1,4 @@
-// users/service/brewery_service.go
+// users/service/reviews_service.go
 package service
 
 import (
@@ -7,8 +7,8 @@ import (
 )
 
 type BreweryService interface {
-	GetUser(id int) (*models.Brewery, error)
-	CreateUser(user *models.Brewery) error
+	GetBrewery(id int) (*models.Brewery, error)
+	CreateBrewery(user *models.Brewery) error
 }
 
 type breweryService struct {

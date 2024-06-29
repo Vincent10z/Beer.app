@@ -1,4 +1,4 @@
-// users/repository/brewery_repository.go
+// users/repository/reviews_repository.go
 package repository
 
 import (

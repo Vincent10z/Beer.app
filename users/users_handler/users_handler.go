@@ -1,5 +1,5 @@
-// users/http/brewery_handler.go
-package http
+// users/product_handler/reviews_handler.go
+package users_handler
 
 import (
 	"Beer.app/models"
@@ -16,6 +16,15 @@ type UserHandler struct {
 
 func NewUserHandler(service service.UserService) *UserHandler {
 	return &UserHandler{service: service}
+}
+
+func UserRouter(e *echo.Echo) {
+	userRepo := repository.NewUserRepository()
+	userService := service.NewUserService(userRepo)
+	userHandler := NewUserHandler(userService)
+
+	e.GET("/users/:id", userHandler.GetUser)
+	e.POST("/users", userHandler.CreateUser)
 }
 
 func (h *UserHandler) GetUser(c echo.Context) error {
@@ -41,13 +50,4 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create user"})
 	}
 	return c.JSON(http.StatusCreated, user)
-}
-
-func RegisterRoutes(e *echo.Echo) {
-	userRepo := repository.NewUserRepository()
-	userService := service.NewUserService(userRepo)
-	userHandler := NewUserHandler(userService)
-
-	e.GET("/users/:id", userHandler.GetUser)
-	e.POST("/users", userHandler.CreateUser)
 }

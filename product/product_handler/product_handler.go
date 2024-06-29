@@ -1,4 +1,4 @@
-package http
+package product_handler
 
 import (
 	"Beer.app/models"
@@ -13,7 +13,7 @@ type ProductHandler struct {
 	service service.ProductService
 }
 
-func productRouter(e *echo.Echo) {
+func ProductRouter(e *echo.Echo) {
 	productRepo := repository.NewProductRepository()
 	productService := service.NewProductService(productRepo)
 	productHandler := NewProductHandler(productService)
