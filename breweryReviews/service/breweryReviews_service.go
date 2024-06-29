@@ -6,23 +6,23 @@ import (
 	"Beer.app/models"
 )
 
-type ReviewService interface {
-	GetReview(id int) (*models.Review, error)
-	CreateReview(review *models.Review) error
+type BreweryReviewService interface {
+	GetBreweryReview(id int) (*models.Review, error)
+	CreateBreweryReview(review *models.Review) error
 }
 
-type reviewService struct {
-	repo repository.ReviewRepository
+type breweryReviewService struct {
+	repo repository.BreweryReviewRepository
 }
 
-func NewReviewService(repo repository.ReviewRepository) ReviewService {
-	return &reviewService{repo: repo}
+func NewReviewService(repo repository.BreweryReviewRepository) BreweryReviewService {
+	return &breweryReviewService{repo: repo}
 }
 
-func (s *reviewService) GetReview(id int) (*models.Review, error) {
-	return s.repo.GetReviewByID(id)
+func (s *breweryReviewService) GetBreweryReview(id int) (*models.Review, error) {
+	return s.repo.GetBreweryReviewByID(id)
 }
 
-func (s *reviewService) CreateReview(review *models.Review) error {
-	return s.repo.CreateReview(review)
+func (s *breweryReviewService) CreateBreweryReview(review *models.Review) error {
+	return s.repo.CreateBreweryReview(review)
 }

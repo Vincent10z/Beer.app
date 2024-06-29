@@ -28,6 +28,6 @@ func (r *beerRepository) GetBeerByID(id int) (*models.Beer, error) {
 }
 
 func (r *beerRepository) CreateBeer(beer *models.Beer) error {
-	r.beers[beer.ID] = beer
+	r.beers[beer.Id] = beer
 	return nil
 }
