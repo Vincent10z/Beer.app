@@ -24,8 +24,8 @@ func BreweryReviewsRouter(e *echo.Echo, db *gorm.DB) {
 	reviewService := service.NewReviewService(reviewRepo)
 	reviewHandler := NewReviewHandler(reviewService)
 
-	e.GET("/breweryReviews/:id", reviewHandler.GetBreweryReview)
-	e.POST("/breweryReviews", reviewHandler.CreateBreweryReview)
+	e.GET("/brewery/reviews/:id", reviewHandler.GetBreweryReview)
+	e.POST("/brewery/reviews", reviewHandler.CreateBreweryReview)
 }
 
 func (h *BreweryReviewHandler) GetBreweryReview(c echo.Context) error {
@@ -42,7 +42,7 @@ func (h *BreweryReviewHandler) GetBreweryReview(c echo.Context) error {
 }
 
 func (h *BreweryReviewHandler) CreateBreweryReview(c echo.Context) error {
-	review := new(models.Review)
+	review := new(models.BreweryReview)
 	if err := c.Bind(review); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request payload"})
 	}

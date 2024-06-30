@@ -7,8 +7,8 @@ import (
 )
 
 type BreweryReviewService interface {
-	GetBreweryReview(id int) (*models.Review, error)
-	CreateBreweryReview(review *models.Review) error
+	GetBreweryReview(id int) (*models.BreweryReview, error)
+	CreateBreweryReview(review *models.BreweryReview) error
 }
 
 type breweryReviewService struct {
@@ -19,10 +19,10 @@ func NewReviewService(repo repository.BreweryReviewRepository) BreweryReviewServ
 	return &breweryReviewService{repo: repo}
 }
 
-func (s *breweryReviewService) GetBreweryReview(id int) (*models.Review, error) {
+func (s *breweryReviewService) GetBreweryReview(id int) (*models.BreweryReview, error) {
 	return s.repo.GetBreweryReviewByID(id)
 }
 
-func (s *breweryReviewService) CreateBreweryReview(review *models.Review) error {
+func (s *breweryReviewService) CreateBreweryReview(review *models.BreweryReview) error {
 	return s.repo.CreateBreweryReview(review)
 }

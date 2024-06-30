@@ -8,8 +8,8 @@ import (
 )
 
 type BreweryReviewRepository interface {
-	GetBreweryReviewByID(id int) (*models.Review, error)
-	CreateBreweryReview(review *models.Review) error
+	GetBreweryReviewByID(id int) (*models.BreweryReview, error)
+	CreateBreweryReview(review *models.BreweryReview) error
 }
 
 type breweryReviewRepository struct {
@@ -20,8 +20,8 @@ func NewBreweryReviewRepository(db *gorm.DB) BreweryReviewRepository {
 	return &breweryReviewRepository{db: db}
 }
 
-func (r *breweryReviewRepository) GetBreweryReviewByID(id int) (*models.Review, error) {
-	review := &models.Review{}
+func (r *breweryReviewRepository) GetBreweryReviewByID(id int) (*models.BreweryReview, error) {
+	review := &models.BreweryReview{}
 
 	if err := r.db.Where("id = ?", id).First(review).Error; err != nil {
 		return nil, eris.Wrapf(err, "failed to get brewery review with id %d", id)
@@ -30,7 +30,7 @@ func (r *breweryReviewRepository) GetBreweryReviewByID(id int) (*models.Review, 
 	return review, nil
 }
 
-func (r *breweryReviewRepository) CreateBreweryReview(review *models.Review) error {
+func (r *breweryReviewRepository) CreateBreweryReview(review *models.BreweryReview) error {
 	if err := r.db.Create(review).Error; err != nil {
 		return eris.Wrap(err, "failed to create brewery review")
 	}

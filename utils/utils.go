@@ -1,12 +1,22 @@
 package utils
 
 import (
-	"Beer.app/config"
-	"github.com/golang-jwt/jwt"
+	"errors"
 	"time"
+
+	"github.com/golang-jwt/jwt"
+	"os"
 )
 
-var jwtKey = []byte(config.JWTSecret)
+// GetJWTKey retrieves the JWT secret key from environment variables.
+func GetJWTKey() []byte {
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		// Default key if not set (for development purposes only)
+		jwtSecret = "default_secret_key"
+	}
+	return []byte(jwtSecret)
+}
 
 // Claims struct to use for JWT payload
 type Claims struct {
@@ -25,6 +35,7 @@ func GenerateJWT(userID int) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	jwtKey := GetJWTKey()
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
 		return "", err
@@ -36,11 +47,17 @@ func GenerateJWT(userID int) (string, error) {
 // VerifyJWT verifies the JWT and returns the user ID if valid.
 func VerifyJWT(tokenString string) (int, error) {
 	claims := &Claims{}
+	jwtKey := GetJWTKey()
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 	if err != nil {
-		return 0, err
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
+				return 0, errors.New("token expired or not valid yet")
+			}
+		}
+		return 0, errors.New("failed to parse token")
 	}
 	if !token.Valid {
 		return 0, errors.New("invalid token")

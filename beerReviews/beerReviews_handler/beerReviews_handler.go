@@ -42,7 +42,7 @@ func (h *BeerReviewHandler) GetBeerReview(c echo.Context) error {
 }
 
 func (h *BeerReviewHandler) CreateBeerReview(c echo.Context) error {
-	review := new(models.Review)
+	review := new(models.BeerReview)
 	if err := c.Bind(review); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request payload"})
 	}

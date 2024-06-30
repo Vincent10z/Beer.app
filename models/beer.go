@@ -1,31 +1,28 @@
 package models
 
 import (
+	"Beer.app/utils"
+	"gorm.io/gorm"
 	"time"
 )
 
-//type Beer struct {
-//	CreatedAt   string `json:"createdAt"`
-//	UpdatedAt   string `json:"updatedAt"`
-//	Id          string `json:"id"`
-//	Name        string `json:"name"`
-//	Type        string `json:"type"`
-//	Grains      string `json:"grains"`
-//	ABV         int    `json:"abv"`
-//	Price       int    `json:"price"`
-//	Rating      int    `json:"rating"`
-//	Quantity    int    `json:"quantity"`
-//	IsAvailable bool   `json:"isAvailable"`
-//	IsDeleted   bool   `json:"isDeleted"`
-//}
+func (b *Beer) BeforeCreate(db *gorm.DB) error {
+	b.ID = utils.GenerateBeerID()
+	return nil
+}
 
 type Beer struct {
-	ID          uint      `gorm:"primaryKey" json:"id"`
-	CreatedAt   time.Time `gorm:"autoCreateTime" json:"createdAt"`
-	UpdatedAt   time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
-	BreweryID   uint      `json:"breweryId"`
-	Name        string    `json:"name"`
+	CreatedAt   time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt   time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	ID          string    `gorm:"primaryKey;type:text" json:"id"`
+	Name        string    `gorm:"not null" json:"name"`
 	Type        string    `json:"type"`
+	StyleID     string    `gorm:"type:text" json:"style_id"`
+	Style       BeerStyle `gorm:"foreignKey:StyleID" json:"style"`
+	ABV         float32   `json:"abv"`
+	IBU         float32   `json:"ibu"`
 	Description string    `json:"description"`
-	ABV         int       `json:"abv"`
+	Image       string    `json:"image"`
+	BreweryID   string    `gorm:"type:text" json:"brewery_id"`
+	Brewery     Brewery   `gorm:"foreignKey:BreweryID" json:"brewery"`
 }

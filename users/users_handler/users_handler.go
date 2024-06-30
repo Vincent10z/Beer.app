@@ -8,15 +8,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 )
 
 type UserHandler struct {
-	service service.UserService
+	UserService service.UserService
 }
 
-func NewUserHandler(service service.UserService) *UserHandler {
-	return &UserHandler{service: service}
+func NewUserHandler(UserService service.UserService) *UserHandler {
+	return &UserHandler{UserService: UserService}
 }
 
 // UserRouter to register user routes
@@ -31,27 +30,26 @@ func UserRouter(e *echo.Echo, db *gorm.DB) {
 
 // GetUser handles `GET /users/:id`
 func (h *UserHandler) GetUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	user, err := h.UserService.GetUser(c.Param("id"))
+
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid user ID"})
+		return c.JSON(http.StatusNotFound, err)
 	}
 
-	user, err := h.service.GetUser(id)
-	if err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{"message": "User not found"})
-	}
 	return c.JSON(http.StatusOK, user)
 }
 
 // CreateUser handles `POST /users`
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	user := new(models.User)
-	if err := c.Bind(user); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request payload"})
+
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	if err := h.service.CreateUser(user); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create user"})
+	if err := h.UserService.CreateUser(user); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
 	}
+
 	return c.JSON(http.StatusCreated, user)
 }
