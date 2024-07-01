@@ -11,6 +11,7 @@ import (
 type IDPrefix string
 
 const (
+	AccountPrefix        IDPrefix = "acc"
 	UserPrefix           IDPrefix = "usr"
 	BreweryPrefix        IDPrefix = "brw"
 	BeerStylePrefix      IDPrefix = "sty"
@@ -34,10 +35,11 @@ const (
 // GenerateID generates a new ID with the given prefix
 func GenerateID(prefix IDPrefix) string {
 	id := xid.New()
-	return fmt.Sprintf("%s_%s", prefix, id.String()[:16])
+	return fmt.Sprintf("%s_%s", prefix, id.String()[:20])
 }
 
 // ID generation functions for each type
+func GenerateAccountID() string        { return GenerateID(AccountPrefix) }
 func GenerateUserID() string           { return GenerateID(UserPrefix) }
 func GenerateBreweryID() string        { return GenerateID(BreweryPrefix) }
 func GenerateBeerStyleID() string      { return GenerateID(BeerStylePrefix) }

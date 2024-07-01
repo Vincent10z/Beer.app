@@ -2,6 +2,7 @@
 package main
 
 import (
+	account_handler "Beer.app/account/beerReviews_handler"
 	"Beer.app/beerReviews/beerReviews_handler"
 	"Beer.app/beers/beer_handler"
 	"Beer.app/breweries/brewery_handler"
@@ -17,6 +18,7 @@ func main() {
 	e := echo.New()
 
 	// Register user routes
+	account_handler.AccountRouter(e, db)
 	users_handler.UserRouter(e, db)
 	beer_handler.BeerRouter(e, db)
 	beerReviews_handler.BeerReviewRouter(e, db)
