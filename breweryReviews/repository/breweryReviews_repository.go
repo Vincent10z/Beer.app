@@ -8,7 +8,7 @@ import (
 )
 
 type BreweryReviewRepository interface {
-	GetBreweryReviewByID(id int) (*models.BreweryReview, error)
+	GetBreweryReviewByID(id string) (*models.BreweryReview, error)
 	CreateBreweryReview(review *models.BreweryReview) error
 }
 
@@ -20,7 +20,7 @@ func NewBreweryReviewRepository(db *gorm.DB) BreweryReviewRepository {
 	return &breweryReviewRepository{db: db}
 }
 
-func (r *breweryReviewRepository) GetBreweryReviewByID(id int) (*models.BreweryReview, error) {
+func (r *breweryReviewRepository) GetBreweryReviewByID(id string) (*models.BreweryReview, error) {
 	review := &models.BreweryReview{}
 
 	if err := r.db.Where("id = ?", id).First(review).Error; err != nil {

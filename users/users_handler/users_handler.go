@@ -1,4 +1,4 @@
-// users/beer_handler/breweryReviews_handler.go
+// users/account_handler/breweryReviews_handler.go
 package users_handler
 
 import (

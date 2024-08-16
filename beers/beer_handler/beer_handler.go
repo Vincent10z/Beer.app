@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 )
 
 type BeerHandler struct {
@@ -28,10 +27,7 @@ func NewBeerHandler(service service.BeerService) *BeerHandler {
 }
 
 func (h *BeerHandler) GetBeer(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
-	}
+	id := c.Param("id")
 
 	beer, err := h.service.GetBeer(id)
 	if err != nil {

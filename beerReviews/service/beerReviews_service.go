@@ -7,7 +7,7 @@ import (
 )
 
 type BeerReviewService interface {
-	GetBeerReview(id int) (*models.BeerReview, error)
+	GetBeerReview(id string) (*models.BeerReview, error)
 	CreateBeerReview(review *models.BeerReview) error
 }
 
@@ -19,7 +19,7 @@ func NewBeerReviewService(repo repository.BeerReviewRepository) BeerReviewServic
 	return &beerReviewService{repo: repo}
 }
 
-func (s *beerReviewService) GetBeerReview(id int) (*models.BeerReview, error) {
+func (s *beerReviewService) GetBeerReview(id string) (*models.BeerReview, error) {
 	return s.repo.GetBeerReviewByID(id)
 }
 

@@ -1,4 +1,4 @@
-// users/beer_handler/breweries_handler.go
+// users/account_handler/breweries_handler.go
 package brewery_handler
 
 import (
@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 )
 
 type BreweryHandler struct {
@@ -29,10 +28,7 @@ func BreweryRouter(e *echo.Echo, db *gorm.DB) {
 }
 
 func (h *BreweryHandler) GetBreweryByID(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid breweries ID"})
-	}
+	id := c.Param("id")
 
 	brewery, err := h.service.GetBrewery(id)
 	if err != nil {
@@ -43,7 +39,7 @@ func (h *BreweryHandler) GetBreweryByID(c echo.Context) error {
 }
 
 func (h *BreweryHandler) CreateBrewery(c echo.Context) error {
-	brewery := new(models.Brewery)
+	brewery := &models.Brewery{}
 	if err := c.Bind(brewery); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request payload"})
 	}

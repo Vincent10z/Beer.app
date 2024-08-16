@@ -12,7 +12,7 @@ type breweryRepository struct {
 }
 
 type BreweryRepository interface {
-	GetBreweryByID(id int) (*models.Brewery, error)
+	GetBreweryByID(id string) (*models.Brewery, error)
 	CreateBrewery(brewery *models.Brewery) error
 }
 
@@ -20,7 +20,7 @@ func NewBreweryRepository(db *gorm.DB) BreweryRepository {
 	return &breweryRepository{db: db}
 }
 
-func (r *breweryRepository) GetBreweryByID(id int) (*models.Brewery, error) {
+func (r *breweryRepository) GetBreweryByID(id string) (*models.Brewery, error) {
 	brewery := &models.Brewery{}
 
 	if err := r.db.Where("id = ?", id).First(brewery).Error; err != nil {

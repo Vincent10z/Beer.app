@@ -2,7 +2,7 @@
 package main
 
 import (
-	account_handler "Beer.app/account/beerReviews_handler"
+	account_handler "Beer.app/account/account_handler"
 	"Beer.app/beerReviews/beerReviews_handler"
 	"Beer.app/beers/beer_handler"
 	"Beer.app/breweries/brewery_handler"

@@ -1,4 +1,4 @@
-// breweryReviews/beer_handler/breweryReviews_handler.go
+// breweryReviews/account_handler/breweryReviews_handler.go
 package breweryReviews_handler
 
 import (
@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 )
 
 type BreweryReviewHandler struct {
@@ -29,10 +28,7 @@ func BreweryReviewsRouter(e *echo.Echo, db *gorm.DB) {
 }
 
 func (h *BreweryReviewHandler) GetBreweryReview(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid review ID"})
-	}
+	id := c.Param("id")
 
 	review, err := h.service.GetBreweryReview(id)
 	if err != nil {

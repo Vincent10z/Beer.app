@@ -12,7 +12,7 @@ type beerRepository struct {
 }
 
 type BeerRepository interface {
-	GetBeerByID(id int) (*models.Beer, error)
+	GetBeerByID(id string) (*models.Beer, error)
 	CreateBeer(beer *models.Beer) error
 }
 
@@ -20,7 +20,7 @@ func NewBeerRepository(db *gorm.DB) BeerRepository {
 	return &beerRepository{db: db}
 }
 
-func (r *beerRepository) GetBeerByID(id int) (*models.Beer, error) {
+func (r *beerRepository) GetBeerByID(id string) (*models.Beer, error) {
 	beer := &models.Beer{}
 
 	if err := r.db.Where("id = ?", id).First(beer).Error; err != nil {
