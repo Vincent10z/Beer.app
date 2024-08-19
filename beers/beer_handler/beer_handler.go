@@ -13,43 +13,74 @@ type BeerHandler struct {
 	service service.BeerService
 }
 
+func NewBeerHandler(service service.BeerService) *BeerHandler {
+	return &BeerHandler{service: service}
+}
+
 func BeerRouter(e *echo.Echo, db *gorm.DB) {
 	beerRepo := repository.NewBeerRepository(db)
 	beerService := service.NewBeerService(beerRepo)
 	beerHandler := NewBeerHandler(beerService)
 
-	e.GET("/beers/:id", beerHandler.GetBeer)
 	e.POST("/beers", beerHandler.CreateBeer)
+	e.GET("/beers/:id", beerHandler.GetBeer)
+	e.PUT("/beers/:id", beerHandler.UpdateBeer)
+	e.DELETE("/beers/:id", beerHandler.DeleteBeer)
+	e.GET("/beers", beerHandler.ListBeers)
 }
 
-func NewBeerHandler(service service.BeerService) *BeerHandler {
-	return &BeerHandler{service: service}
+func (h *BeerHandler) CreateBeer(c echo.Context) error {
+	beer := new(models.Beer)
+	if err := c.Bind(beer); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request payload"})
+	}
+
+	createdBeer, err := h.service.CreateBeer(beer)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create beer"})
+	}
+
+	return c.JSON(http.StatusCreated, createdBeer)
 }
 
 func (h *BeerHandler) GetBeer(c echo.Context) error {
 	id := c.Param("id")
-
 	beer, err := h.service.GetBeer(id)
 	if err != nil {
-		return c.JSON(http.StatusNotFound, err)
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "Beer not found"})
 	}
-
-	if beer == nil {
-		return c.JSON(http.StatusNotFound, err)
-	}
-
 	return c.JSON(http.StatusOK, beer)
 }
 
-func (h *BeerHandler) CreateBeer(c echo.Context) error {
-	beer := models.Beer{}
-	if err := c.Bind(&beer); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+func (h *BeerHandler) UpdateBeer(c echo.Context) error {
+	id := c.Param("id")
+	beer := new(models.Beer)
+	if err := c.Bind(beer); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request payload"})
+	}
+	beer.ID = id
+
+	updatedBeer, err := h.service.UpdateBeer(beer)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to update beer"})
 	}
 
-	if err := h.service.CreateBeer(&beer); err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
+	return c.JSON(http.StatusOK, updatedBeer)
+}
 
-	return c.JSON(http.StatusCreated, beer)
+func (h *BeerHandler) DeleteBeer(c echo.Context) error {
+	id := c.Param("id")
+	err := h.service.DeleteBeer(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete beer"})
+	}
+	return c.NoContent(http.StatusNoContent)
+}
+
+func (h *BeerHandler) ListBeers(c echo.Context) error {
+	beers, err := h.service.ListBeers()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to list beers"})
+	}
+	return c.JSON(http.StatusOK, beers)
 }

@@ -32,7 +32,7 @@ func (h *BreweryHandler) GetBreweryByID(c echo.Context) error {
 
 	brewery, err := h.service.GetBrewery(id)
 	if err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{"message": "Brewery not found"})
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Brewery not found"})
 	}
 
 	return c.JSON(http.StatusOK, brewery)
