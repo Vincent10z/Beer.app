@@ -35,12 +35,12 @@ func (h *BeerHandler) CreateBeer(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request payload"})
 	}
 
-	createdBeer, err := h.service.CreateBeer(beer)
+	beer, err := h.service.CreateBeer(beer)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create beer"})
 	}
 
-	return c.JSON(http.StatusCreated, createdBeer)
+	return c.JSON(http.StatusCreated, beer)
 }
 
 func (h *BeerHandler) GetBeer(c echo.Context) error {

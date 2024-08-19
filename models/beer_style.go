@@ -6,7 +6,7 @@ import (
 )
 
 func (b *BeerStyle) BeforeCreate(tx *gorm.DB) error {
-	b.ID = utils.GenerateBreweryID()
+	b.ID = utils.GenerateBeerStyleID()
 	return nil
 }
 
